@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+    <a href="home.html">Home</a> |
+    <a href="machine.jsp">Machine List</a> |
+    <a href="feedback.html">Feedback</a>
+</div>
+
+<div id="content">
+    <h2>Machine Selection Portal</h2>
+    <ul>
+        <li>Select computer of your choice.</li>
+        <li>You can enhance RAM, if needed.</li>
+        <li>Prices are already discounted.</li>
+    </ul>
+</div>
+
+</body>
+</html>
+(ii) Machine List Page – JSP + Database
+Step 1: Create Database
+sql
+Copy code
+CREATE DATABASE MachineDB;
+
+USE MachineDB;
+
+CREATE TABLE Machine (
+    model_no VARCHAR(10),
+    processor VARCHAR(10),
+    RAM VARCHAR(10),
+    cost INT
+);
+Sample Data (Minimum 4 records)
+sql
+Copy code
+INSERT INTO Machine VALUES ('M01', 'I3', '6GB', 35000);
+INSERT INTO Machine VALUES ('M02', 'I5', '8GB', 45000);
+INSERT INTO Machine VALUES ('M03', 'I7', '16GB', 65000);
+INSERT INTO Machine VALUES ('M04', 'I9', '32GB', 85000);
+Step 2: JSP Page – machine.jsp
+jsp
+Copy code
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Machine List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+    <a href="home.html">Home</a> |
+    <a href="machine.jsp">Machine List</a> |
+    <a href="feedback.html">Feedback</a>
+</div>
+
+<div id="content">
+    <h2>Machine List</h2>
+
+    <table border="1">
+        <tr>
+            <th>Model_no</th>
+            <th>Processor</th>
+            <th>RAM</th>
+            <th>Cost</th>
+        </tr>
+
+        <%
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/MachineDB", "root", "password");
+
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Machine");
+
+            while(rs.next()) {
+        %>
+        <tr>
+            <td><%= rs.getString("model_no") %></td>
+            <td><%= rs.getString("processor") %></td>
+            <td><%= rs.getString("RAM") %></td>
+            <td><%= rs.getInt("cost") %></td>
+        </tr>
+        <%
+            }
+            con.close();
+        %>
+    </table>
+</div>
+
+</body>
+</html>
+(iii) Feedback Page – feedback.html
+Requirement
+Simple form
+
+No validation or processing code required
+
+Code: feedback.html
+html
+Copy code
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+    <a href="home.html">Home</a> |
+    <a href="machine.jsp">Machine List</a> |
+    <a href="feedback.html">Feedback</a>
+</div>
+
+<div id="content">
+    <h2>Feedback Form</h2>
+
+    <form>
+        Name:
+        <input type="text" name="name"><br><br>
+
+        RAM:
+        <input type="radio" name="ram">4GB
+        <input type="radio" name="ram">8GB<br><br>
+
+        <input type="submit" value="SUBMIT">
+    </form>
+</div>
+
+</body>
+</html>
+Q1 (b) External CSS File – style.css
+Requirement
+Same layout for all pages
+
+Content division background → light green
+
+css
+Copy code
+body {
+    font-family: Arial;
+}
+
+#menu {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+#menu a {
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+#content {
+    margin-top: 10px;
+    padding: 20px;
+    border: 1px solid black;
+    background-color: lightgreen;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
